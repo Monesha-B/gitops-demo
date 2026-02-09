@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: gitops-demo
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: gitops-demo
@@ -14,6 +14,11 @@ spec:
     spec:
       containers:
       - name: gitops-demo
-        image: moneshab/gitops-demo:v3
+        image: moneshab/gitops-demo:clean
         ports:
         - containerPort: 80
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
