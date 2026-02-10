@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: gitops-demo
+  namespace: default
 spec:
   replicas: 5
   selector:
@@ -13,12 +14,20 @@ spec:
         app: gitops-demo
     spec:
       containers:
-      - name: gitops-demo
-        image: moneshab/gitops-demo:clean
-        ports:
-        - containerPort: 80
-        env:
-        - name: POD_NAME
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.name
+        - name: gitops-demo
+          image: moneshab/gitops-demo:clean
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "64Mi"
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
